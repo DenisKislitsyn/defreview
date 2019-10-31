@@ -5,6 +5,7 @@
 #include <StoreKit/StoreKit.h>
 
 NSString *minVersion = @"10.3";
+NSString *openAppStoreVersion = @"13.0";
 
 bool DefReview_isSupported() {
     BOOL status = NO;
@@ -16,7 +17,11 @@ bool DefReview_isSupported() {
 
 void DefReview_requestReview() {
 	if (DefReview_isSupported()) {
-       [SKStoreReviewController requestReview];
+	    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(openAppStoreVersion)) {
+			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/app/id1458095497?action=write-review"]];
+        } else {
+			[SKStoreReviewController requestReview];
+        }
     }
 }
 #endif
